@@ -1,4 +1,4 @@
-package entrants.ghosts.username;
+package entrants.ghosts.naveenaswa;
 
 import pacman.controllers.IndividualGhostController;
 import pacman.controllers.MASController;
@@ -8,10 +8,10 @@ import pacman.game.Game;
 /**
  * Created by Piers on 11/11/2015.
  */
-public class Sue extends IndividualGhostController {
+public class Pinky extends IndividualGhostController {
 
-    public Sue() {
-        super(Constants.GHOST.SUE);
+    public Pinky() {
+        super(Constants.GHOST.PINKY);
     }
 
     @Override

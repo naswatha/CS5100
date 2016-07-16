@@ -1,4 +1,4 @@
-package entrants.ghosts.username;
+package entrants.ghosts.naveenaswa;
 
 import pacman.controllers.IndividualGhostController;
 import pacman.controllers.MASController;
@@ -8,10 +8,11 @@ import pacman.game.Game;
 /**
  * Created by Piers on 11/11/2015.
  */
-public class Inky extends IndividualGhostController {
+public class Blinky extends IndividualGhostController {
 
-    public Inky() {
-        super(Constants.GHOST.INKY);
+
+    public Blinky() {
+        super(Constants.GHOST.BLINKY);
     }
 
     @Override

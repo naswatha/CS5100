@@ -1,4 +1,4 @@
-package entrants.pacman.username;
+package entrants.pacman.naveenaswa;
 
 import pacman.controllers.PacmanController;
 import pacman.game.Constants.MOVE;
@@ -14,6 +14,18 @@ public class MyPacMan extends PacmanController {
 
     public MOVE getMove(Game game, long timeDue) {
         //Place your game logic here to play the game as Ms Pac-Man
+    	
+    	// Should always be possible as we are PacMan
+        int current = game.getPacmanCurrentNodeIndex();
+        //System.out.println("Current Position"+current);
+        int[] pills = game.getPillIndices();
+        int[] powerPills = game.getPowerPillIndices();
+        
+        System.out.println("Pill indices");
+        for(int i = 0;i < pills.length; i++){
+        	System.out.println(+pills[i]);
+        }
+        
 
         return myMove;
     }

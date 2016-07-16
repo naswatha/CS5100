@@ -1,9 +1,5 @@
-Rules available on our site:
+CS5100 - Foundations of Artificial Intelligence
 
-www.pacmanvghosts.co.uk
+Naveen Aswathanarayana
 
-Change the package names to your username on the site.
-
-Edit the entrants code
-
-Use the bash script to prepare the zip file for submission (Works on Windows under Git bash)
+Pacman Project
