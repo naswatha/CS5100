@@ -50,10 +50,7 @@ public class BFSMyPacMan extends PacmanController {
         for(Integer pill: toBeVisitedPills) {
         	targetPill = pill;
             break;
-        } //TA comments : This loop is not aligning with the Algorithm. The loop is anyway breaking here and it is always first pill.
-          //              it is equal to just an assignment.
-          //             Also is the observable pills, taking all the nodes into consideration like BFS?
-          //             Think you might have to consider indices and their neighbors.
+        } 
         
         if(current == targetPill){
         	toBeVisitedPills.remove(targetPill);
