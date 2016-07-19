@@ -55,7 +55,16 @@ public class BFSMyPacMan extends PacmanController {
         if(current == targetPill){
         	toBeVisitedPills.remove(targetPill);
         }
-
+        
+        /**
+         * Shabbir:
+         * Although you use some goofy code to calculate target, there is actually no BFS implemented in your code. 
+         * You are using inbuilt game function to plot a path to the target. Not acceptable!
+         * 
+         * Either create a custom function to find "getNextMoveTowardsTarget" using BFS 
+         *                  OR
+         * Find the target using BFS over the observable version of game.
+         */
         return game.getNextMoveTowardsTarget(current,targetPill, DM.PATH); 
     }
 }
