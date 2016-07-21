@@ -1,0 +1,55 @@
+ Exercise  1.3 How many facts, rules, clauses, and predicates are there in the following knowledge base? What are the heads of the rules, and what are the goals they contain?
+
+   woman(vincent).
+   woman(mia).
+   man(jules).
+   person(X):-  man(X);  woman(X).
+   loves(X,Y):-  father(X,Y).
+   father(Y,Z):-  man(Y),  son(Z,Y).
+   father(Y,Z):-  man(Y),  daughter(Z,Y). 
+
+   Solution:
+
+   Facts:
+   -----
+   Three facts
+   woman(vincent).
+   woman(mia).
+   man(jules).
+
+   Rules:
+   ------
+   four rules
+   person(X):-  man(X);  woman(X).
+   loves(X,Y):-  father(X,Y).
+   father(Y,Z):-  man(Y),  son(Z,Y).
+   father(Y,Z):-  man(Y),  daughter(Z,Y). 
+
+   Clauses
+   -------
+   There are seven clauses
+   all the given statements are clauses
+
+   Predicates
+   ----------
+   there are five predicates
+   woman, man, person, loves and father
+
+
+   Heads and goals
+   ---------------
+   person(X), loves(X,Y) and father(Y,Z) are head, 
+
+   person(X):-  man(X);  woman(X).
+   for person there are two goals, either person should be a man or woman
+
+
+   loves(X,Y):-  father(X,Y).
+   for loves there is just one goal, to be a father for the same variable X and Y
+
+   father(Y,Z):-  man(Y),  son(Z,Y).
+   for father there are two goals to satisfy both man whose name is Y and have a son whose name is Z.
+
+
+   father(Y,Z):-  man(Y),  daughter(Z,Y). 
+   for father there are two goals to satisfy both man whose name is Y and have a daughter whose name is Z.
