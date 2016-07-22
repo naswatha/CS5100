@@ -33,6 +33,7 @@ public class POPacMan extends PacmanController {
                 }
             }
         }
+        
 
         /// Strategy 2: Find nearest edible ghost and go after them
         int minDistance = Integer.MAX_VALUE;

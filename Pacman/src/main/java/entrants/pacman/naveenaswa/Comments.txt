@@ -1,0 +1,61 @@
+Implementation
+--------------
+Determine all the possible game states from the current state of pacman and maze.
+Depending on the four possible moves that can be achieved from the pacman build
+a tree structure that can hold all the game states. From this tree structure we have
+all the possible moves that pacman can make and also maintains the score each path can
+have.
+
+Using this score of each game state we can determine the target or goal state with the
+maximum score. GameNode is the class used to build these game state at each move pacman
+makes from current position.
+
+Game State ==> gameNodes at each depth level.
+Goal State ==> gameNode with highest score for BFS and gameNode with is closest based on
+heuristic function for Greedy BFS on specified depth.
+
+Uninformed search -- BFS(Breadth First Search)
+----------------------------------------------
+Uninformed search implementation contains the Breadth first search algorithm.
+As we generate all the game states from the root to the specified depth, we get the
+tree structure. We travese each gamenode i.e., gamestate and determine the target goal
+state with the maximum score.
+
+Since at each game state we span 4 children at nth depth we get 4^n children.
+hence we can infer that the time complexity for the written program will be O(4^n).
+Since we also generate equal number of game node we need O(4^n).
+
+Several sorting functions and data transfers are implemented which might not be affected 
+in the same magnitude as the BFS algorithm.
+
+Current implementaion of the BFS algorithm
+Time Complexity O(4^n) + O(nlogn)
+Space Complexity O(4^n)
+
+Informed search -- Greedy BFS(Greedy Best First Search)
+----------------------------------------------
+Informed search implementation contains the greedy best first search algorithm.
+As we generate all the game states from the root to the specified depth, we get the
+tree structure. But instead of traversing all children like BFS we select the game states
+which are closest to the source index of pacman through heuristic function. In this
+implementation we can use Manhattan distance or Shortest distance. Hence each though few
+game states having higher score are ignored for the game states which are nearer to the
+source game state.
+
+Since at each game state we span 4 children but we sort and utilize only the best among
+the children game state at each level we generate 4 children. At n the depth we would have
+generated 4n children and compare 4n children for the best goal state.
+Hence we can infer that the time complexity for the written program will be O(4n).
+Since we also generate equal number of game node we need O(4n).
+
+Also implementation has several sort and data transfer between different datatypes.
+Heuristic function manhattanHeuristic(), shortestDistance() implemented to sort the 
+nodes at each nth depth. contains 4 nodes. Which operates at O(4nlogn) ==> O(nlogn)
+and requires equal space as the number of nodes.
+
+Current implementaion of the Greedy BFS algorithm
+Time Complexity O(4n) + O(nlogn)
+Space Complexity O(4n)
+
+
+

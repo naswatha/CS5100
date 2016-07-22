@@ -1,5 +1,6 @@
 import examples.commGhosts.POCommGhosts;
 import pacman.Executor;
+import pacman.controllers.examples.RandomGhosts;
 import entrants.pacman.naveenaswa.*;
 //import examples.poPacMan.POPacMan;
 
@@ -15,7 +16,7 @@ public class Main {
         Executor executor = new Executor(true, true);
 
         //executor.runGameTimed(new POPacMan(), new POCommGhosts(50), true);
-        executor.runGameTimed(new BFSMyPacMan(), new POCommGhosts(50), true);
-        //executor.runGameTimed(new GreedyBFSMyPacMan(), new POCommGhosts(50), true);
+        executor.runGameTimed(new BFSPacman(), new RandomGhosts(), true);
+        //executor.runGameTimed(new GreedyBFSPacman(), new RandomGhosts(), true);
     }
 }

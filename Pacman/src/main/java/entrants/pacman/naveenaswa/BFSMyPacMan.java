@@ -51,9 +51,9 @@ public class BFSMyPacMan extends PacmanController {
         	targetPill = pill;
             break;
         }
-        if(current == targetPill){
-        	toBeVisitedPills.remove(targetPill);
-        }
+//        if(current == targetPill){
+//        	toBeVisitedPills.remove(targetPill);
+//        }
 
         return game.getNextMoveTowardsTarget(current,targetPill, DM.PATH);
     }
