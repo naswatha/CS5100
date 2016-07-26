@@ -1,0 +1,53 @@
+Implementation - MinMax Algorithm
+--------------
+Determine all the possible game states from the current state of pacman and
+determine the move which has the maximum score, updating only pacman's position.
+Alternatively for each combination of four ghosts movement we create game state representing
+those movements and calculate the minimum score when updating only ghost's position.
+This generates a tree structure where we need to choose the max score from the pacman update
+and minimum score from the ghosts update to a certain specified depth.
+
+Using this max score from each move that pacman make we determine whether to go forward in that
+direction. GameNode is the class used to build these game state at each move pacman
+makes from current position.
+
+Heuristic Function:
+------------------
+Heuristic here is based on two factors.
+1) game.getScore() which is generated as pacman eats up the next available pill.
+-- Score has been factored to be multiple of 5 to increase to avoid situations where penalty
+for moving towards the ghosts becomes negative. And also to break the tie when both alternative
+movements between pacman indexes provides same score.
+
+2) distance between the pacman and each of the ghosts.
+-- If pacman is at a distance less than SAFE_DISTANCE, score for that particular will
+be penalized.
+
+Other factors which could have been included to maximize score are
+1) Move towards powerpill and eat immediate ghosts within EDIBLE_DISTANCE.
+
+
+Game State ==> gameNodes at each depth level.
+Goal State ==> gameNode with highest score from heuristic function based on minmax algorithm.
+
+MinMax Algorithm.
+----------------------------------------------
+Determine all the possible game states from the current state of pacman and
+determine the move which has the maximum score, updating only pacman's position.
+Alternatively for each combination of four ghosts movement we create game state representing
+those movements and calculate the minimum score when updating only ghost's position.
+This generates a tree structure where we need to choose the max score from the pacman update
+and minimum score from the ghosts update to a certain specified depth.
+
+At each pacman node where we check for max score there are at most 4 children generated for 4 direction.
+At each pacman node where we check for min score there are at most 4 children generated for 3 direction.
+(since we are getting the possible moves which does not include the lastmove).
+
+if we run the game for n depth.
+The tree will be 4^n + (3^4)^n
+
+Current implementaion of minmax algorithm has
+Time Complexity O(4^n) + O((3^4)^n) = O((3^4)^n)
+Space Complexity 1 + 4 + (3^4)*4 + 4*(3^4)*4 + (3^4)*4*(3^4)*4
+Recursive function utilizes the stack space as well.
+

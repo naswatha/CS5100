@@ -70,17 +70,6 @@ public class GameNode{
 		this.state = state;
 	}
 	
-//	/**
-//	 * @description : constructor
-//	 */
-//	public GameNode(int pillIndex,GameNode parent, ArrayList<MOVE> action, int score, Game state){
-//		this.pillIndex = pillIndex;
-//		this.action = action;
-//		this.score = score;
-//		this.parent = parent;
-//		this.state = state;
-//	}
-//	
 	/**
 	 * @description : to string method for debug
 	 */
