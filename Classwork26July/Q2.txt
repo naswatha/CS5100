@@ -1,0 +1,95 @@
+wife(elizabeth,kingphilip).
+wife(diana,charles).
+wife(camilia,charles).
+wife(anne,captainmark).
+wife(anne,admiraltimoty).
+wife(sarah,andrew).
+wife(sophie,edward).
+wife(kate,william).
+wife(autumn,peter).
+wife(zara,mike).
+son(charles,elizabeth).
+son(andrew,elizabeth).
+son(edward,elizabeth).
+son(william,diana).
+son(harry,diana).
+son(peter,anne).
+son(james,sophie).
+son(george,kate).
+daughter(anne,elizabeth).
+daughter(zara,anne).
+daughter(beatrice,sarah).
+daughter(eugine,sarah).
+daughter(lousie,sophie).
+daughter(savannah,autumn).
+daughter(isla,autumn).
+daughter(mia,zara).
+
+
+husband(X,Y):- wife(Y,X).
+spouse(X,Y) :- wife(X,Y);husband(X,Y).
+child(X,Y) :- son(X,Y) ; daughter(X,Y);
+    spouse(Z,Y), son(X,Z); 
+    spouse(Z,Y), daughter(X,Z).
+parent(X,Y) :- child(Y,X).
+grandparent(X,Y) :- parent(X,Z), parent(Z,Y).
+grandchild(X,Y) :- grandparent(Y,X).
+greatgrandparent(X,Y) :- parent(X,Z), grandparent(Z,Y).
+greatgrandchild(X,Y) :- greatgrandparent(Y,X).
+father(X,Y) :- husband(X,Z),parent(Z,Y).
+mother(X,Y) :- wife(X,Z),parent(Z,Y).
+brother(X,Y) :-  father(Z,X),father(Z,Y),
+    mother(W,X),mother(W,Y),
+    not(X = Y).
+sister(X,Y) :-  father(Z,X),father(Z,Y),
+    mother(W,X),mother(W,Y),
+    not(X = Y).
+
+uncle(X,W) :-  brother(X,Y), parent(Y,W), husband(X,Z), wife(Z,X).
+uncle(X,Z) :-  husband(X,Y), brother(Y,W), parent(W,Z).
+
+aunt(X,W) :-  sister(X,Y), parent(Y,W), wife(X,Z), husband(Z,X).
+aunt(X,Z) :-  wife(X,Y), sister(Y,W), parent(W,Z).
+
+brotherinlaw(X,Y) :-  wife(Y,Z), brother(X,Z), husband(X,W), wife(W,X).
+brotherinlaw(X,Y) :- wife(Y,Z), brother(W,Z),wife(W,X), husband(X,W).
+
+
+sisterinlaw(X,Y) :-  wife(Y,Z), brother(X,Z), wife(X,W), husband(W,X).
+sisterinlaw(X,Y) :-  wife(Y,Z), brother(W,Z), husband(W,X), wife(X,W).
+
+nieces(X,Y) :- brother(Z,Y), daughter(X,Z).
+nieces(X,Y) :- wife(Z,W), brother(W,Y), daughter(X,Z).
+
+
+
+/**
+ * 2c)
+ * Who is sarah's husband.
+ * ? husband(X,sarah).
+ * andrew
+ *
+ * Who are Elizabeth’s great grandchildren?
+ * ? greatgrandchild(X,elizabeth).
+ * george, savannah, isla, mia
+ * 
+ * Who are zara's grandparents?
+ * ? grandparent(X,zara).
+ * elizabeth, kingphilip
+ * 
+ * Who are Diana’s brothers and sisters-in-law?
+ * ? brotherinlaw(X,diana).
+ * andrew, edward, captainmark, admiraltimoty
+ * ? sisterinlaw(X,diana).
+ * anne, sarah, sophie
+ *
+ * Who are Beatrice’s uncles?
+ * ? uncle(X,beatrice).
+ * charles, edward, captainmark, admiraltimoty
+ * 
+ * Who are Charles's  nieces?
+ * ? uncle(X,beatrice).
+ * zara, beatrice, eugine, lousie
+ *
+ */
+

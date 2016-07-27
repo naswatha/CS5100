@@ -55,8 +55,14 @@ motorway(64,66).
 motorway(76,66).
 motorway(66,69).
 
-footpath(X,Y) :- footpath(Y,X).
-motorway(X,Y) :- motorway(Y,X).
+
+
+/*
+ * These two rules have recursive loop which might not be
+ * efficient for two hop calculations.
+ * footpath(X,Y) :- footpath(Y,X).
+ * motorway(X,Y) :- motorway(Y,X).
+ */
 connected(X, Y) :- footpath(X, Y); motorway(X, Y).
 path(X,Y) :- connected(X,Y).
 path(X,Z) :- connected(Y,Z), path(X,Y).
@@ -81,4 +87,6 @@ path(X,Z) :- connected(Y,Z), path(X,Y).
  * ? motorway(59,58)
  * There are no footpath between hall 62 and 65? false
  * ? footpath(62,65)
+ * Is there a route between hall 53 and 52? yes
+ * ? path(59,68)
  */
