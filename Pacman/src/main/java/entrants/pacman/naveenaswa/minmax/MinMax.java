@@ -4,11 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
-
-import examples.commGhosts.POCommGhosts;
 import pacman.controllers.PacmanController;
-import pacman.controllers.examples.StarterGhosts;
-import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants;
 import pacman.game.Game;
@@ -24,10 +20,20 @@ import pacman.game.Constants.MOVE;
  */
 public class MinMax extends PacmanController {
 
+	// tick for debug purpose
 	public static int tick = 0;
-	private static int PENALTY_SCORE = 500;
-	private static int SAFE_DISTANCE = 2;
+	// penalty score if ghost encountered.
+	private static int PENALTY_SCORE = 1000;
+	// establish safe distance from ghosts
+	private static int SAFE_DISTANCE = 25;
 
+	/**
+	 * @description: central method responsible to get the best move which
+	 * could be made from the available game states from minmax algorithm.
+	 * @param : game : current game state
+	 * @param : timedue :time till next move.
+	 * @return : MOVE : the move that should be made by the pacman
+	 */
 	@Override
 	public MOVE getMove(Game game, long timeDue) {	
 
@@ -38,78 +44,39 @@ public class MinMax extends PacmanController {
 		int maxScore = Integer.MIN_VALUE;
 		int compareScore;
 
-		// for each move pacman can make.
+		// for each move pacman can make take the maximum score for pacman.
 		for(MOVE move : gameCopy.getPossibleMoves(currentIndex)){
-			gameCopy.updatePacMan(move);
+			Game newGame = gameCopy.copy();
+			newGame.updatePacMan(move);
+			newGame.updateGame();
 			int pillIndex = gameCopy.getPacmanCurrentNodeIndex();
 			ArrayList<MOVE> moves = new ArrayList<MOVE>();
 			moves.add(move);
-			GameNode newNode = new GameNode(pillIndex,null,moves,gameCopy);
+			GameNode newNode = new GameNode(pillIndex,null,moves,newGame);
+			// call minmax function to get the minimum score for the ghosts moves.
 			compareScore = minmaxFunction(newNode, 4, false);
-			compareScore = compareScore + tieBreaker(currentIndex, move, gameCopy);
+			System.out.println("Compare Score: "+compareScore);
 			if(compareScore > maxScore){
 				maxScore = compareScore;
 				myMove = move;
 			}	 
 		}
 		System.out.println("Move Made: "+myMove);
-		//	if(tick == 2){
-		//		System.exit(0);
-		//	}
-
 		return myMove;
 	}
-
-	// return the score based on the game state inside the 
-	// node.
-	private static int heuristicFunction(GameNode node) {
-
-		int score = node.state.getScore();
-		score = score * 5;
-
-		int blinkyIndex = node.state.getGhostCurrentNodeIndex(Constants.GHOST.BLINKY);
-		int inkyIndex = node.state.getGhostCurrentNodeIndex(Constants.GHOST.INKY);
-		int pinkyIndex = node.state.getGhostCurrentNodeIndex(Constants.GHOST.PINKY);
-		int sueIndex = node.state.getGhostCurrentNodeIndex(Constants.GHOST.SUE);
-
-		int blinkyDistance = node.state.getManhattanDistance(node.pillIndex, blinkyIndex);
-		int inkyDistance = node.state.getManhattanDistance(node.pillIndex, inkyIndex);
-		int pinkyDistance = node.state.getManhattanDistance(node.pillIndex, pinkyIndex);
-		int sueDistance = node.state.getManhattanDistance(node.pillIndex, sueIndex);
-
-		if(blinkyDistance < SAFE_DISTANCE || inkyDistance < SAFE_DISTANCE 
-				|| pinkyDistance < SAFE_DISTANCE || sueDistance < SAFE_DISTANCE){
-			score = score - PENALTY_SCORE;
-		}
-
-		return score;
-
-	}
-
-	private int tieBreaker(int currentIndex, MOVE move, Game gameCopy) {
-
-		ArrayList<Integer> allAvailablePills = loadAvailablePills(gameCopy);
-		int closestPill = 0;
-		int minDist = Integer.MAX_VALUE;
-		for(Integer pill : allAvailablePills){
-			int distance = gameCopy.getShortestPathDistance(currentIndex, pill);
-			if(distance < minDist){
-				minDist = distance;
-				closestPill = pill;
-			}
-		}
-		int tie = 0;
-		if(move == gameCopy.getNextMoveTowardsTarget(currentIndex, closestPill, DM.PATH)){
-			tie = 100;
-		}
-		gameCopy.updatePacMan(move);
-
-		if(move == gameCopy.getNextMoveTowardsTarget(gameCopy.getPacmanCurrentNodeIndex(), closestPill, DM.PATH)){
-			tie = tie+100;
-		}
-		return tie;
-	}
-
+	
+	
+	/**
+	 * @description: 
+	 * Recursively generate all the moves that pacman can make and pick the maximum score
+	 * and generate all the moves that ghosts can make and pick the minimum score from
+	 * those game states. Depth can be provided to mention how many nodes or game states 
+	 * to be evaluated in order to get best score.
+	 * @param : node : each move the pacman makes from first level.
+	 * @param : depth : how many games states to be evaluated
+	 * @param : maxPlayer : collect max score for pacman or ghost
+	 * @return : bestScore : which contains the best score in order to avoid ghosts.
+	 */
 	public static int minmaxFunction(GameNode node, int depth, boolean maxPlayer){
 
 		if (depth == 0 || node.state.gameOver())
@@ -135,23 +102,30 @@ public class MinMax extends PacmanController {
 			return bestScore;
 		}
 	}
-
+	
+	/**
+	 * @description: 
+	 * Generate all the nodes when pacman makes its move and update game state.
+	 * @param : node : game node 
+	 * @return : childGameNodes : game nodes generated when pacman makes move.
+	 */
 	private static ArrayList<GameNode> generatePacmanChildren(GameNode node) {
 
 		ArrayList<GameNode> childGameNodes = new ArrayList<GameNode>();
 
 		for(MOVE move : node.state.getPossibleMoves(node.pillIndex)){
-			node.state.updatePacMan(move);
-			int pillIndex = node.state.getPacmanCurrentNodeIndex();	
+			Game newGame = node.state.copy();
+			newGame.updatePacMan(move);
+			newGame.updateGame();
+			int pillIndex = newGame.getPacmanCurrentNodeIndex();	
 			ArrayList<MOVE> moves = new ArrayList<MOVE>();
 			moves.addAll(node.action);
 			moves.add(move);
-			Game newCopy = node.state.copy();
 
-			GameNode newNode = new GameNode(pillIndex,node,moves,newCopy);
+			GameNode newNode = new GameNode(pillIndex,node,moves,newGame);
 			childGameNodes.add(newNode);
 			try{
-				GameView.addLines(newNode.state, Color.GREEN, newNode.pillIndex, newNode.state.getNeighbour(newNode.pillIndex, node.action.get(0)));
+				GameView.addLines(newGame, Color.GREEN, newNode.pillIndex, newGame.getNeighbour(newNode.pillIndex, node.action.get(0)));
 			}
 			catch(Exception e){
 				continue;
@@ -160,7 +134,12 @@ public class MinMax extends PacmanController {
 		return childGameNodes;
 	}
 
-
+	/**
+	 * @description: 
+	 * Generate all the nodes when ghost makes its move and update game state.
+	 * @param : node : game node 
+	 * @return : childGameNodes : game nodes generated when ghosts makes move.
+	 */
 	private static ArrayList<GameNode> generateGhostChildren(GameNode node) {
 		// generate all children nodes from that root node.
 		// for each move the current node makes.
@@ -213,13 +192,14 @@ public class MinMax extends PacmanController {
 						ghostMoves.put(GHOST.INKY, moveG2);
 						ghostMoves.put(GHOST.PINKY, moveG3);
 						ghostMoves.put(GHOST.SUE, moveG4);
-						node.state.updateGhosts(ghostMoves);
-						Game newCopy = node.state.copy();
+						Game newGame = node.state.copy();
+						newGame.updateGhosts(ghostMoves);
+						newGame.updateGame();
 
 						//int newScore = node.state.getScore();
-						int pillIndex = node.state.getPacmanCurrentNodeIndex();	
+						int pillIndex = newGame.getPacmanCurrentNodeIndex();	
 
-						GameNode newNode = new GameNode(pillIndex,node,node.action,newCopy);
+						GameNode newNode = new GameNode(pillIndex,node,node.action,newGame);
 						//GameView.addLines(node.state, Color.GREEN, node.pillIndex, node.state.getNeighbour(node.pillIndex, node.action.get(0)));
 						childGameNodes.add(newNode);
 					}		
@@ -228,8 +208,84 @@ public class MinMax extends PacmanController {
 		}
 		return childGameNodes;
 	}
+	
+	/**
+	 * @description: 
+	 * Heuristic here is based on two factors.
+	 * 1) game.getScore() which is generated as pacman eats up the next available pill.
+	 * -- Score has been factored to be multiple of 50 to break the tie when both alternative
+	 *	movements between pacman indexes provides same score.
+	 * 2) distance between the pacman and each of the ghosts.
+	 * -- If pacman is at a distance less than SAFE_DISTANCE, score for that particular will
+	 * be penalized.
+	 * @param : node : each move the pacman makes from first level.
+	 * @return : bestScore : which contains the best score in order to avoid ghosts.
+	 */
+	private static int heuristicFunction(GameNode node) {
 
-	private ArrayList<Integer> loadAvailablePills(Game gameCopy) {
+		Game game = node.state;
+		int score = game.getScore();
+		score = score * 50;
+
+		score = score - tieBreaker(game.getPacmanCurrentNodeIndex(),game);
+
+		int blinkyIndex = game.getGhostCurrentNodeIndex(Constants.GHOST.BLINKY);
+		int inkyIndex = game.getGhostCurrentNodeIndex(Constants.GHOST.INKY);
+		int pinkyIndex = game.getGhostCurrentNodeIndex(Constants.GHOST.PINKY);
+		int sueIndex = game.getGhostCurrentNodeIndex(Constants.GHOST.SUE);
+
+		int blinkyDistance = game.getManhattanDistance(node.pillIndex, blinkyIndex);
+		int inkyDistance = game.getManhattanDistance(node.pillIndex, inkyIndex);
+		int pinkyDistance = game.getManhattanDistance(node.pillIndex, pinkyIndex);
+		int sueDistance = game.getManhattanDistance(node.pillIndex, sueIndex);
+
+		if(blinkyDistance < SAFE_DISTANCE || inkyDistance < SAFE_DISTANCE 
+				|| pinkyDistance < SAFE_DISTANCE || sueDistance < SAFE_DISTANCE){
+			score = score - PENALTY_SCORE;
+		}
+		else if(game.getGhostEdibleTime(GHOST.BLINKY) > 0 && game.getGhostEdibleTime(GHOST.INKY) > 0 &&
+				game.getGhostEdibleTime(GHOST.PINKY) > 0 && game.getGhostEdibleTime(GHOST.SUE) > 0){
+			score = score + PENALTY_SCORE;
+		}
+		if(game.wasPacManEaten()){
+			score = 0;
+		}
+		return score;
+
+	}
+
+	/**
+	 * @description: 
+	 * to break the tie when both alternative movements between pacman indexes provides 
+	 * same score.
+	 * @param : currentIndex : pacman current index
+	 * @param : gameCopy : game state to be evaluated.
+	 * @return : nearestPillDist : distance to nearest pill with respect to pacman
+	 */
+	private static int tieBreaker(int currentIndex, Game gameCopy) {
+
+		ArrayList<Integer> allAvailablePills = loadAvailablePills(gameCopy);
+		int closestPill = 0;
+		int minDist = Integer.MAX_VALUE;
+		for(Integer pill : allAvailablePills){
+			int distance = gameCopy.getShortestPathDistance(currentIndex, pill);
+			if(distance < minDist){
+				minDist = distance;
+				closestPill = pill;
+			}
+		}
+		int nearestPillDist = gameCopy.getShortestPathDistance(gameCopy.getPacmanCurrentNodeIndex(), closestPill);
+		return nearestPillDist;
+	}
+
+	
+	/**
+	 * @description: 
+	 * load all the available pills on the current maze.
+	 * @param : gameCopy : game state to be evaluated.
+	 * @return : targets : arraylist containing all the available pills
+	 */
+	private static ArrayList<Integer> loadAvailablePills(Game gameCopy) {
 		int[] pills = gameCopy.getPillIndices();
 		int[] powerPills = gameCopy.getPowerPillIndices();
 
