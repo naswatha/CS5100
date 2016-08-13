@@ -17,8 +17,8 @@ public class Main {
         Executor executor = new Executor(false, true);
 
         // executor.runGameTimed(new POPacMan(), new POCommGhosts(50), true);
-        // executor.runGameTimed(new BFSPacman(), new RandomGhosts(), true);
-        // executor.runGameTimed(new GreedyBFSPacman(), new RandomGhosts(), true);
-        executor.runGame(new MinMax(), new POCommGhosts(50), true, 45);
+        // executor.runGameTimed(new BFSPacman(), new POCommGhosts(50), true);
+        // executor.runGameTimed(new GreedyBFSPacman(), new POCommGhosts(50), true);
+         executor.runGame(new MinMax(), new POCommGhosts(50), true, 40);
     }
 }

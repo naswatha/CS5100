@@ -1,11 +1,14 @@
 package entrants.pacman.naveenaswa;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
 import pacman.controllers.PacmanController;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
+import pacman.game.GameView;
 
 /**
  * @author Naveen
@@ -105,7 +108,13 @@ public class BFSPacman extends PacmanController {
 									action.addAll(currentNode.action);
 									action.add(move);
 									int score = currentNode.score + 1;
-									gameNodeQueue.add(new GameNode(depth, nextPillIndex,action,score));								
+									gameNodeQueue.add(new GameNode(depth, nextPillIndex,action,score));		
+									try{
+										GameView.addLines(game, Color.GREEN, game.getPacmanCurrentNodeIndex(), game.getNeighbour(nextPillIndex, move));
+									}
+									catch(Exception e){
+										continue;
+									}
 							}
 							else{
 								ArrayList<MOVE> action = new ArrayList<MOVE>();
@@ -113,6 +122,12 @@ public class BFSPacman extends PacmanController {
 								action.add(move);
 								int score = currentNode.score + 0;
 								gameNodeQueue.add(new GameNode(depth, nextPillIndex,action,score));
+//								try{
+//									GameView.addLines(game, Color.GREEN, game.getPacmanCurrentNodeIndex(), game.getNeighbour(nextPillIndex, move));
+//								}
+//								catch(Exception e){
+//									continue;
+//								}
 								
 							}
 						}
