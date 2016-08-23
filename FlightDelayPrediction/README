@@ -1,0 +1,32 @@
+Steps to execute the different implementations in our project -
+
+    1) Open terminal/command prompt
+    2) Go to our project folder
+    3) To run the different implementations -
+
+        a) Run the following command for k nearest neighbors -
+           make knn
+        
+        b) Run the following command for naive bayes classifier -
+           make naive
+        
+        a) Run the following command for k nearest neighbors using WEKA -
+           make wekaknn
+        
+        a) Run the following command for naive bayes classifier using WEKA -
+           make wekanaive           
+           
+NOTE: On an average each implementation takes about 20 mins to run.
+
+Sample output:
+===================================================================
+Validation Report with Confusion Matrix for k Nearest Neighbors:
+===================================================================
+TRUE & TRUE: 736
+TRUE & FALSE: 755
+FALSE & TRUE: 1409
+FALSE & FALSE: 1751
+Correct Predictions Percentage: 53.47
+Incorrect Predictions Percentage: 46.53
+===================================================================
+
